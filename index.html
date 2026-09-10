@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>data542 — Bruce McMinn</title>
+  <meta name="description" content="Bruce McMinn — data architecture and engineering near Bellingham, WA. A shared AWS foundation running a live weather pipeline and a daily equities scanner."/>
+  <meta property="og:title" content="data542 — Bruce McMinn"/>
+  <meta property="og:description" content="Every project on this site runs on a shared AWS foundation. Two production pipelines run on it today."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://data542.com/"/>
+  <meta property="og:image" content="https://data542.com/assets/img/logo.png"/>
+  <link rel="stylesheet" href="assets/styles.css"/>
+  <link rel="icon" type="image/png" href="assets/img/logo.png"/>
+</head>
+<body>
+
+<!-- ═════ BAND 1 · BELLINGHAM BAY, AT DUSK ═════ -->
+<section class="band band--1">
+  <div class="band-inner">
+    <div class="gutter"><b>data542.com</b>bellingham, wa</div>
+    <div class="stack">
+
+      <div class="mast-id">
+        <div class="logo-disk" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+            <defs>
+              <radialGradient id="dg" cx="48%" cy="42%" r="55%">
+                <stop offset="0%"   stop-color="#FFD166"/>
+                <stop offset="35%"  stop-color="#FF8C42"/>
+                <stop offset="70%"  stop-color="#C1440E"/>
+                <stop offset="100%" stop-color="#2D1B69"/>
+              </radialGradient>
+              <linearGradient id="db" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#1B0F3A"/>
+                <stop offset="100%" stop-color="#0A0A1F"/>
+              </linearGradient>
+              <linearGradient id="rf" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#FF8C42" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#2D1B69" stop-opacity="0.05"/>
+              </linearGradient>
+              <clipPath id="dc"><circle cx="60" cy="60" r="54"/></clipPath>
+            </defs>
+            <circle cx="60" cy="60" r="56" fill="#2D1B69" opacity="0.35"/>
+            <circle cx="60" cy="60" r="54" fill="url(#dg)"/>
+            <g clip-path="url(#dc)">
+              <rect x="6" y="60" width="108" height="60" fill="url(#db)" opacity="0.72"/>
+              <rect x="50" y="60" width="20"  height="60" fill="url(#rf)"/>
+              <line x1="6" y1="60" x2="114" y2="60" stroke="#FFD166" stroke-width="0.8" opacity="0.55"/>
+              <rect x="6" y="65"  width="108" height="4"   fill="#120830" opacity="0.80"/>
+              <rect x="6" y="73"  width="108" height="3.5" fill="#120830" opacity="0.70"/>
+              <rect x="6" y="80"  width="108" height="3"   fill="#120830" opacity="0.62"/>
+              <rect x="6" y="87"  width="108" height="3"   fill="#120830" opacity="0.55"/>
+              <rect x="6" y="93"  width="108" height="2.5" fill="#120830" opacity="0.48"/>
+              <rect x="6" y="99"  width="108" height="2.5" fill="#120830" opacity="0.40"/>
+              <rect x="6" y="105" width="108" height="2"   fill="#120830" opacity="0.32"/>
+              <rect x="6" y="110" width="108" height="2"   fill="#120830" opacity="0.24"/>
+            </g>
+          </svg>
+        </div>
+        <div>
+          <h1>data<span class="amber">542</span></h1>
+          <p class="tagline">Bruce McMinn &mdash; Data Architecture &amp; Engineering</p>
+        </div>
+      </div>
+
+      <p class="lead"><strong>Every project on this site runs on a shared AWS foundation.</strong>
+         Two production pipelines run on it today &mdash; a weather station feed updating nightly
+         since 2023, and a daily equities scanner &mdash; with further projects planned on the
+         same platform.</p>
+
+      <nav class="links">
+        <a href="https://www.linkedin.com/in/bruce-mcminn/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/brucemcminn" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:bruce@data542.com">bruce@data542.com</a>
+      </nav>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════ BAND 2 · THE PLATFORM ═════ -->
+<section class="band band--2">
+  <div class="band-inner">
+    <div class="gutter"><b>Platform</b>s3://tempestdata-data542</div>
+    <div class="stack">
+
+      <h2>The lake pattern</h2>
+      <p>The projects here share one data lake design: a medallion architecture, with layers named
+         for what they do rather than for the metals. Compute is matched to the workload, not
+         standardized on one service &mdash; short ingestion and transformation jobs run on Lambda,
+         while longer-running scans run as Fargate container tasks. Projects share a single S3
+         bucket, separated by prefix and governed by IAM roles scoped to each project's own data.</p>
+
+      <figure class="diagram">
+        <img src="data542-current-architecture.svg"
+             alt="data542 platform architecture: Tempest and market data flow through Lambda and Fargate into an S3 medallion lake, then out via CloudFront to Power BI"
+             loading="lazy"/>
+      </figure>
+
+      <blockquote class="pull">
+        <p>When a failed wind sensor produced a month of bad readings, the fix was applied
+           surgically in the reporting layer &mdash; nulling only the affected fields for the
+           affected month &mdash; rather than rebuilding the silver layer.</p>
+        <p>A purist would push that correction into the lake; shipping it at the reporting layer
+           preserved the raw record, fixed the published data the same day, and left a clean path
+           to promote the fix upstream later. Knowing where to deviate from the textbook, and
+           keeping the deviation documented and reversible, is most of what the pattern is for.</p>
+      </blockquote>
+
+      <a class="go" href="architecture.html">Architecture decisions, in full &rarr;</a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════ BAND 3 · WEATHERFLOW ═════ -->
+<section class="band band--3">
+  <div class="band-inner">
+    <div class="gutter"><b>Live</b>historic_data/</div>
+    <div class="project">
+      <div class="stack">
+        <h3>WeatherFlow Live Dashboard</h3>
+        <p>Raw observations land from the WeatherFlow API exactly as received, giving every
+           downstream step a replayable source of record. A cleaning pass repairs structural
+           defects without touching granularity, at the station's native 1-minute resolution.
+           A final aggregation builds a 5-minute materialized view &mdash; <strong>the only layer
+           Power BI ever reads: roughly 272,000 pre-aggregated rows instead of millions</strong>,
+           cheap to cache and fast to refresh.</p>
+        <a class="go" href="https://app.fabric.microsoft.com/view?r=eyJrIjoiM2NlMWNhZGQtOWRiYS00ZGYwLTg3ZWEtZWNmZjdmNDEzMzdmIiwidCI6ImI1ZDQ3ZjJkLWU5M2UtNDNkOC1hNWVhLTEyZDAyM2RiOGNkYSJ9"
+           target="_blank" rel="noopener">View the live report &rarr;</a>
+      </div>
+      <figure class="shot">
+        <img src="assets/img/weather-thumb.png" alt="WeatherFlow Live Dashboard in Power BI"
+             loading="lazy"/>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ BAND 4 · SWING TRADER ═════ -->
+<section class="band band--4">
+  <div class="band-inner">
+    <div class="gutter"><b>Live</b>swing_trader/</div>
+    <div class="project project--flip">
+      <div class="stack">
+        <h3>Swing Trader</h3>
+        <p>A containerized daily scan of high-volatility NASDAQ equities using ATR, RSI, Supertrend,
+           and volume rules, appending to a growing scan history. The universe of scanned symbols
+           rebuilds weekly; scans run each weekday after market close.</p>
+        <p><strong>It runs on Fargate rather than Lambda for a specific reason:</strong> the scanner
+           processes hundreds of symbols and can exceed Lambda's 15-minute execution ceiling.
+           A single compute standard would be simpler to describe and worse to operate.</p>
+        <a class="go" href="https://app.fabric.microsoft.com/view?r=eyJrIjoiNzk1MDYxOTEtODU3NC00NzkwLTlhMzktYjk4NTI5NTRjNzI0IiwidCI6ImI1ZDQ3ZjJkLWU5M2UtNDNkOC1hNWVhLTEyZDAyM2RiOGNkYSJ9"
+           target="_blank" rel="noopener">View the scan &rarr;</a>
+      </div>
+      <figure class="shot">
+        <img src="assets/img/swingtrader-thumb.png" alt="Swing Trader nightly scan in Power BI"
+             loading="lazy"/>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ BAND 5 · EURO ON FOREX ═════ -->
+<section class="band band--5">
+  <div class="band-inner">
+    <div class="gutter"><b>Notebook</b>euro-forex</div>
+    <div class="project">
+      <div class="stack">
+        <h3>Euro on FOREX</h3>
+        <p>An early exploratory notebook: twenty years of Euro exchange rate volatility across forty
+           currencies, geopolitical events mapped against market movement, and an animated annual
+           volatility world map. It predates the platform &mdash; a rebuild on it is on the roadmap
+           below.</p>
+        <a class="go" href="assets/notebooks/euro-forex/" target="_blank" rel="noopener">View the notebook &rarr;</a>
+      </div>
+      <figure class="shot">
+        <img src="assets/img/forex-thumb.png" alt="Euro on FOREX annual volatility world map"
+             loading="lazy"/>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ BAND 6 · ARTIST POINT · ALPENGLOW ═════ -->
+<section class="band band--6">
+  <div class="band-inner">
+    <div class="gutter"><b>Roadmap</b>what's next on the platform</div>
+    <div class="stack">
+      <h2>What's coming</h2>
+      <div class="roadmap">
+
+        <div class="road-item">
+          <div class="status status--next">Next</div>
+          <div>
+            <h3>Best Washington Sunset</h3>
+            <p>A one-time terrain analysis of west-facing viewpoints around Puget Sound &mdash;
+               computing sunset azimuth against horizon profiles derived from USGS elevation data
+               &mdash; to rank, for any date, which site offers the latest visible sunset and the
+               longest civil twilight. Its heavy computation runs once, offline; the report reads a
+               static result table, a deliberately different shape from the two scheduled pipelines.</p>
+          </div>
+        </div>
+
+        <div class="road-item">
+          <div class="status status--planned">Planned</div>
+          <div>
+            <h3>FOREX modernization</h3>
+            <p>The exploratory notebook rebuilt on the platform, with a currency-pair selector,
+               multiple timescales, and a three-dimensional volatility visualization across twenty pairs.</p>
+          </div>
+        </div>
+
+        <div class="road-item">
+          <div class="status status--exploring">Exploring</div>
+          <div>
+            <h3>Marine Telemetry</h3>
+            <p>An NMEA 2000 gateway capturing live data from an outboard engine and onboard
+               instruments &mdash; fuel flow, heading, position &mdash; during time on the water.
+               Unlike the platform's scheduled API pipelines, this data originates at the edge,
+               collected in intermittent sessions and batch-uploaded to the lake afterward. Early
+               targets: fuel-efficiency curves by speed, and cross-referencing heading against
+               position to estimate the effect of current.</p>
+          </div>
+        </div>
+
+        <div class="road-item">
+          <div class="status status--deferred">Deferred</div>
+          <div>
+            <h3>The shared catalog &mdash; by design</h3>
+            <p>A common bucket convention and a Glue Data Catalog across all projects, sequenced to
+               begin once the Sunset project's requirements are concrete. Building them before the
+               next project exists would mean designing for workloads that haven't taken shape.
+               Knowing what not to build yet is an architecture decision too.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ BAND 7 · COLOPHON ═════ -->
+<footer class="band band--7">
+  <div class="band-inner">
+    <div class="gutter"><b>Contact</b>bellingham, wa</div>
+    <div class="stack">
+
+      <div class="elevation">
+        <svg viewBox="0 0 640 130" role="img" aria-label="Elevation profile of State Route 542, from Bellingham Bay at sea level to Artist Point at 5,140 feet">
+          <circle cx="26" cy="34" r="13" fill="#FF8C42" opacity="0.9"/>
+          <circle cx="26" cy="34" r="21" fill="#FF8C42" opacity="0.13"/>
+          <path d="M8 100 L120 97 L215 92 L300 86 L370 74 L420 62 L470 48 L520 34 L575 24 L632 20 L632 112 L8 112 Z"
+                fill="#FFB347" opacity="0.07"/>
+          <path d="M8 100 L120 97 L215 92 L300 86 L370 74 L420 62 L470 48 L520 34 L575 24 L632 20"
+                fill="none" stroke="#FFB347" stroke-width="1.6"/>
+          <line x1="8" y1="112" x2="632" y2="112" stroke="#2e2660"/>
+          <text x="8" y="127" fill="#9b92c0" font-size="9.5" letter-spacing="1">BELLINGHAM BAY &middot; 0 FT</text>
+          <text x="320" y="127" fill="#5a4aaa" font-size="9.5" letter-spacing="1" text-anchor="middle">STATE ROUTE 542</text>
+          <text x="632" y="127" fill="#FFD166" font-size="9.5" letter-spacing="1" text-anchor="end">ARTIST POINT &middot; 5,140 FT</text>
+        </svg>
+      </div>
+
+      <nav class="links">
+        <a href="mailto:bruce@data542.com">bruce@data542.com</a>
+        <a href="https://www.linkedin.com/in/bruce-mcminn/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/brucemcminn" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+
+      <p class="colophon">data542.com &middot; Bellingham, WA</p>
+
+    </div>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

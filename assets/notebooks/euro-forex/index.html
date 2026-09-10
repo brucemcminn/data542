@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Euro on Forex — data542</title>
+<meta name="description" content="Twenty years of Euro exchange rate volatility across eight currencies, mapped against geopolitical events.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:        #120830;
+    --bg-panel:  #1a1140;
+    --border:    #2d1b69;
+    --border2:   #3a2680;
+    --text-hi:   #ece7fb;
+    --text-mid:  #a99fd1;
+    --text-lo:   #6c5fa0;
+    --accent:    #ffb347;
+    --accent2:   #ff8c5a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(255,140,90,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 20%, rgba(45,27,105,0.6), transparent 60%);
+    color: var(--text-hi);
+    font-family: 'Source Serif 4', Georgia, serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration-color: rgba(255,179,71,0.4); }
+  a:hover { text-decoration-color: var(--accent); }
+
+  .topbar {
+    border-bottom: 1px solid var(--border);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    background: rgba(18,8,48,0.85);
+    backdrop-filter: blur(6px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .topbar a.back {
+    color: var(--text-mid);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .topbar a.back:hover { color: var(--accent); }
+  .topbar .mark {
+    color: var(--text-lo);
+    letter-spacing: 0.1em;
+  }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 64px 24px 120px;
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 6px;
+    color: var(--text-hi);
+  }
+
+  h2.subtitle {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text-mid);
+    margin: 0 0 40px;
+  }
+
+  article h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 52px 0 4px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  article h4 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--text-hi);
+    margin: 28px 0 8px;
+  }
+
+  article p { color: #d6cef2; margin: 0 0 16px; }
+
+  article ul, article ol { color: #d6cef2; padding-left: 22px; margin: 0 0 16px; }
+  article li { margin-bottom: 8px; }
+
+  .figure {
+    margin: 28px 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-panel);
+    padding: 14px;
+  }
+  .figure img { display: block; width: 100%; height: auto; border-radius: 3px; }
+  .figure.small { max-width: 480px; margin-left: auto; margin-right: auto; }
+
+  .figure-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-lo);
+    letter-spacing: 0.03em;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .citations {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-lo);
+    line-height: 1.9;
+    padding-left: 20px;
+  }
+  .citations li { margin-bottom: 6px; word-break: break-word; }
+  .citations a { color: var(--text-mid); }
+
+  footer {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-lo);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+  footer a { color: var(--text-mid); }
+
+  @media (max-width: 600px) {
+    main { padding: 40px 18px 80px; }
+    footer { padding-left: 18px; padding-right: 18px; flex-direction: column; gap: 10px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="https://data542.com">&larr; data542.com</a>
+  <span class="mark">EURO / FOREX</span>
+</div>
+
+<main>
+  <div class="eyebrow">Python &middot; Pandas &middot; FOREX &middot; Geospatial</div>
+  <h1>The Euro on Forex</h1>
+  <h2 class="subtitle">Exploring Twenty Years of Volatility</h2>
+
+  <article>
+    <h3>Very Brief History</h3>
+    <p>The currency exchange market has been around since coins were first used. At the end of the 1800s the development of the gold standard fixed currency values to a certain amount of gold, allowing for an internationally stable monetary system (1). Eventually the amount of gold was not enough to keep up with the demand for currency. After World War II the Bretton Woods Accord set the US Dollar as the global fixed currency. This created an adjustable rate exchange, but it was still determined by central banks and state actors (2). The US dollar was pegged to gold at the time, and during the 1970s the same liquidity problem (i.e. amount of gold vs currency in circulation) occurred. In August of 1971 President Richard Nixon unilaterally canceled direct international convertibility of the US dollar to gold, inadvertently beginning a regime of free-floating currencies (3).</p>
+
+    <h3>Today</h3>
+    <p>The modern foreign exchange market (Forex, FX, or currency market) is a direct broker to dealer global marketplace that determines the market value and exchange rate of currencies all over the world. It is open 24 hours a day, 5 days a week. Currencies are always traded in pairs, and the value expressed is of one currency relative to another. For example, at the end of the day on 11/19/21 the Euro to US dollar rate was 1.13, or $1.13 equals &euro;1. All of the twenty most traded currencies are free-floating, their value is determined by political conditions, economic factors and market psychology.</p>
+    <p>Forex is by far the largest financial market in the world, in 2019 having a daily volume of over $6.6 trillion (4). The Euro to US dollar (EURUSD) is the most traded currency pair, taking about 30% of the multi-billion dollar Forex turnover (5).</p>
+
+    <h3>Methodology</h3>
+    <p>This study examines the more than two decades of exchange rates for the Euro. It uses the 2019 Triennial Central Bank Survey by the Bank for International Settlements to determine four currencies that represent large portions of the market and four currencies that represent small portions of the market. The highly traded currencies are the US dollar, Japanese yen, UK pound, and Australian dollar. The Israeli shekel, Philippine peso, Malaysian ringgit, and Romanian leu comprise the group of least traded currencies.</p>
+    <p>The data set used is based on daily closing values provided by the European Central Bank and compiled by Daria Chemkaeva. It is updated weekly, the version used for this study was downloaded from Kaggle in November 2021.</p>
+
+    <h3>Summary</h3>
+    <ul>
+      <li>This study demonstrates that geopolitics has broad influence on the foreign exchange market. This is shown through the correlation between historical events and changes in FOREX.</li>
+      <li>This study also reveals global and regional synchronicity in exchange rate volatility.</li>
+    </ul>
+
+    <h3>Euro &amp; Traded Pairs</h3>
+    <h4>Euro to Highly Traded Currencies</h4>
+    <p>The first set of line graphs represent the exchange rates for the Euro to the US dollar, Japanese yen, UK pound, and Australian dollar. These four currencies, in addition to the Euro, are the top five currencies in the Forex market. All five together comprise over 75% of daily trades (4).</p>
+    <h4>Euro to Least Traded Currencies</h4>
+    <p>The second set of graphs represent the exchange rates for the Euro to the Israeli shekel, Philippine peso, Malaysian ringgit, and Romanian leu. These four currencies have low trade volumes, they comprise less than 0.4% of daily trades (4).</p>
+
+    <div class="figure">
+      <img src="img/euro-to-high.png" alt="Line graphs of Euro exchange rates against the US dollar, Japanese yen, UK pound, and Australian dollar, 1999–2021">
+    </div>
+    <div class="figure">
+      <img src="img/euro-to-low.png" alt="Line graphs of Euro exchange rates against the Israeli shekel, Philippine peso, Malaysian ringgit, and Romanian leu, 1999–2021">
+      <div class="figure-caption">Euro exchange rates &middot; highly traded pairs (top) &middot; least traded pairs (bottom)</div>
+    </div>
+
+    <h3>Euro &amp; Traded Pairs Conclusion</h3>
+    <h4>High Frequency Pairs</h4>
+    <ul>
+      <li>The US dollar, Japanese yen, and UK pound all show a tight ratio (1:1) with the Euro in the early 2000s.</li>
+      <li>Both the Japanese yen and Australian dollar have a period in 2011 or 2012 where the exchange ratio gets tight and then rebounds. Is it really at the same time? Are there any other countries with the same pattern and what could the cause have been?</li>
+    </ul>
+    <h4>Low Frequency Pairs</h4>
+    <ul>
+      <li>The Israeli shekel appears to have steadily closed its ratio to the Euro over the last two decades, while the Romanian leu is definitely losing value.</li>
+      <li>The shekel and leu appear to be fairly stable, or have low volatility.</li>
+      <li>The Israeli shekel, Malaysian ringgit, and Philippine peso also show the tight ratio of the early 2000s.</li>
+    </ul>
+
+    <h3>Alignments</h3>
+    <p>We can answer some questions and come up with some new ones by overlapping graphs of the exchange rates. Closer looks will often reveal how currencies respond to similar events. The graph below examines the rate for the Euro to the four major currencies simultaneously.</p>
+
+    <div class="figure">
+      <img src="img/alignment.png" alt="Overlaid line graph of Euro exchange rates against the four major currencies, showing periods of alignment and divergence">
+      <div class="figure-caption">Alignment of Euro to high-frequency pairs, 1999–2021</div>
+    </div>
+
+    <h3>Alignments Conclusion</h3>
+    <p>The overlay of the four major currencies shows some very interesting patterns. Broadly speaking, there are periods of strong alignment, divergent alignment, and times with minimal correlation.</p>
+    <ul>
+      <li>The Japanese yen, UK pound, and US dollar all track closely from the start of data collection through the early years following the September 11 attacks in the US.</li>
+      <li>The September 11 attacks also mark a long period where those three currencies have a looser trade ratio with the Euro. It is not evident if this is due to a strong Euro or if the other currencies are trading lower in conjunction.</li>
+      <li>In October of 2008 the US President, Treasury Secretary, and Congress enacted the Emergency Economic Stabilization Act, the main pillar of which was the $700 billion Troubled Asset Relief Program (7). This was in response to the 2007&ndash;2008 Financial Crisis and led to an &ldquo;unprecedented federal intervention to rescue banks and restore confidence to the finance sector&rdquo; (8). It marks an interesting point in the Alignment of Euro/High Frequency Pairs graph, and can be seen more closely in the zoomed image below.</li>
+    </ul>
+
+    <div class="figure small">
+      <img src="img/zoom.png" alt="Zoomed-in view of the 2008 financial crisis period in the currency alignment graph">
+      <div class="figure-caption">2008 financial crisis, detail view</div>
+    </div>
+
+    <ul>
+      <li>Lastly, all four trading currencies can be seen responding in a similar way to the 2012 European Debt Crisis, by tightening the trading ratio with the Euro. On September 6 of that year the European Central Bank announced an open-ended and unlimited period of buying distressed bonds from all Eurozone countries involved in a sovereign state bailout program (9). This was seen as the most dramatic move to that date (10). The Alignment of Euro/High Frequency Pairs graph would seem to indicate that at this point the Euro stopped its dramatic slide towards a 1:1 ratio and quickly gained ground on the Japanese yen and Australian dollar.</li>
+    </ul>
+
+    <h3>Volatility</h3>
+    <p>A basic explanation of market volatility is the amount of price change for a commodity in a given period of time. This can be seen for stocks, on the FOREX, or in many other places. For traders, especially day and swing traders, volatility is a key component for making financial decisions. To make money in the financial market there must be price movement. Managing the opportunities and risks requires continuous tracking of volatility and associated indicators. This study looks at annual volatility, first for the eight traded currencies and then on a global map for the entire dataset. This broad of a time frame is unlikely to be used for making a specific trade. However, it can reveal patterns that could be used for building a more robust algorithm.</p>
+
+    <div class="figure">
+      <img src="img/annual-volatility-major.png" alt="Bar chart of annual volatility for the four highly traded currencies">
+    </div>
+    <div class="figure">
+      <img src="img/annual-volatility-minor.png" alt="Bar chart of annual volatility for the four least traded currencies">
+      <div class="figure-caption">Annual volatility &middot; highly traded pairs (top) &middot; least traded pairs (bottom)</div>
+    </div>
+
+    <div class="figure">
+      <img src="img/map_gif.gif" alt="Animated world map showing annual Euro exchange rate volatility by country from 1999 to 2021">
+      <div class="figure-caption">Annual Euro exchange rate volatility by country, 1999&ndash;2021 (animated)</div>
+    </div>
+
+    <h3>Volatility Conclusion</h3>
+    <ul>
+      <li>The Annual Volatility bar charts appear to show a cyclical pattern in the exchange rate for the Euro to the other trading currencies. It is more apparent with some than others. This pattern repeats at similar but not matching intervals. This suggests that market forces have corresponding effects.</li>
+      <li>The bar chart also shows that annual volatility has decreased over the entire span of time for the Romanian leu and, to a lesser extent, the Israeli shekel. This somewhat linear pattern is difficult for capitalizing on. It also points to some specific type of political or economic story.</li>
+      <li>The Annual Volatility map confirms that volatility is often distributed evenly throughout all the trading currencies in the data set. It also shows that some outliers retain their uniqueness for multiple years. Russia, Turkey, and South Africa all stand out. The map also reveals the absence of data for large and important geographic areas and specific countries. This includes Central and South America, Africa, and the Middle East as well as Spain, France, and Germany.</li>
+    </ul>
+
+    <h3>Further Research</h3>
+    <p>Examining the historical alignments for the exchange rates of various currencies is a promising avenue. This could be used to illuminate the bi-directional influence of geopolitical events and regional economies. Creating a robust interactive tool would allow the researcher increased focus and granularity by allowing them to select specific countries and time periods.</p>
+    <p>The volatility information this study examined is only the tip of the iceberg for this type of analysis. Incorporating a slider to choose the time frame would greatly increase the ability to make informed trading decisions. This data set provides information that would range down to daily rates, but obviously this could be in much smaller increments. In addition to the bar chart and maps, a line graph with Bollinger bands will show more detail.</p>
+
+    <h3>Citations</h3>
+    <ol class="citations">
+      <li>Eichengreen, Barry. &ldquo;Globalizing Capital.&rdquo; 2009, <a href="https://doi.org/10.1515/9781400828814" target="_blank" rel="noopener">doi.org/10.1515/9781400828814</a>.</li>
+      <li>&ldquo;Bretton Woods System &ndash; Wikipedia.&rdquo; en.wikipedia.org, 2022, <a href="https://en.wikipedia.org/wiki/Bretton_Woods_system" target="_blank" rel="noopener">en.wikipedia.org/wiki/Bretton_Woods_system</a>.</li>
+      <li>Ghizoni. &ldquo;Nixon Ends Convertibility Of U.S. Dollars To Gold And Announces Wage/Price Controls | Federal Reserve History.&rdquo; Federalreservehistory.org, 2022, <a href="https://www.federalreservehistory.org/essays/gold-convertibility-ends" target="_blank" rel="noopener">federalreservehistory.org/essays/gold-convertibility-ends</a>.</li>
+      <li>&ldquo;Foreign Exchange Turnover In April 2019.&rdquo; bis.org, 2022, <a href="https://www.bis.org/statistics/rpfx19_fx.htm" target="_blank" rel="noopener">bis.org/statistics/rpfx19_fx.htm</a>.</li>
+      <li>&ldquo;The Most Traded Currency Pairs In Forex (2022 Edition).&rdquo; FXSSI &ndash; Forex Sentiment Board, 2022, <a href="https://fxssi.com/the-most-traded-currency-pairs" target="_blank" rel="noopener">fxssi.com/the-most-traded-currency-pairs</a>.</li>
+      <li>Chemkaeva. &ldquo;Daily Exchange Rates Per Euro 1999&ndash;2022.&rdquo; kaggle.com, 2022, <a href="https://www.kaggle.com/lsind18/euro-exchange-daily-rates-19992020" target="_blank" rel="noopener">kaggle.com/lsind18/euro-exchange-daily-rates-19992020</a>.</li>
+      <li>&ldquo;Emergency Economic Stabilization Act Of 2008 &ndash; Wikipedia.&rdquo; en.wikipedia.org, 2022, <a href="https://en.wikipedia.org/wiki/Emergency_Economic_Stabilization_Act_of_2008" target="_blank" rel="noopener">en.wikipedia.org/wiki/Emergency_Economic_Stabilization_Act_of_2008</a>.</li>
+      <li>David, Marc. &ldquo;US Government Financial Bailouts.&rdquo; Investopedia, 2022, <a href="https://www.investopedia.com/articles/economics/08/government-financial-bailout.asp" target="_blank" rel="noopener">investopedia.com/articles/economics/08/government-financial-bailout.asp</a>.</li>
+      <li>&ldquo;European Debt Crisis &ndash; Wikipedia.&rdquo; en.wikipedia.org, 2022, <a href="https://en.wikipedia.org/wiki/European_debt_crisis" target="_blank" rel="noopener">en.wikipedia.org/wiki/European_debt_crisis</a>.</li>
+      <li>Traynor, Ian. &ldquo;ECB Introduces Unlimited Bond-Buying In Boldest Attempt Yet To End Euro Crisis.&rdquo; The Guardian, 2012, <a href="https://www.theguardian.com/business/2012/sep/06/debt-crisis-mario-draghi" target="_blank" rel="noopener">theguardian.com/business/2012/sep/06/debt-crisis-mario-draghi</a>.</li>
+    </ol>
+  </article>
+</main>
+
+<footer>
+  <span>data542.com &middot; Bruce McMinn</span>
+  <span><a href="https://github.com/brucemcminn/Dataquest/blob/main/Project%205" target="_blank" rel="noopener">Source on GitHub &rarr;</a></span>
+</footer>
+
+</body>
+</html>

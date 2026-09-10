@@ -1,0 +1,280 @@
+/* ============================================================
+   data542.com — styles.css
+
+   Layout: seven full-bleed horizontal bands read as the climb
+   of State Route 542, from Bellingham Bay at sea level to
+   Artist Point at 5,140 ft. Band grounds and the hairline rule
+   at each seam warm as you descend, ending in alpenglow.
+   ============================================================ */
+
+/* ── TOKENS ── */
+:root {
+  /* palette */
+  --bg:           #0e0c20;
+  --bg2:          #141230;
+  --bg3:          #1c1840;
+  --border:       #2e2660;
+  --border-hover: #5a4aaa;
+  --amber:        #FFB347;
+  --coral:        #FF6B35;
+  --gold:         #FFD166;
+  --text:         #e8e0f0;
+  --muted:        #9b92c0;
+
+  /* the climb — band grounds, sea level to summit */
+  --b1: #08061a;
+  --b2: #0e0c20;
+  --b3: #131031;
+  --b4: #181335;
+  --b5: #1d1539;
+  --b6: #25183a;
+  --b7: #0c0a1c;
+
+  /* horizon rules — indigo through coral to gold */
+  --h2: #2e2660;
+  --h3: #3a2a6e;
+  --h4: #6b3f6a;
+  --h5: #a04d4a;
+  --h6: #FF6B35;
+  --h7: #FFD166;
+
+  --radius: 10px;
+  --font:      'Georgia', 'Times New Roman', serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; color-scheme: dark; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+
+a { color: var(--amber); text-decoration: none; }
+a:hover { color: var(--gold); }
+
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ── BAND SYSTEM ── */
+.band { padding: clamp(2.4rem, 5.5vw, 4.5rem) clamp(1.1rem, 5vw, 3rem); }
+
+.band--1 { background: var(--b1); }
+.band--2 { background: var(--b2); border-top: 1px solid var(--h2); }
+.band--3 { background: var(--b3); border-top: 1px solid var(--h3); }
+.band--4 { background: var(--b4); border-top: 1px solid var(--h4); }
+.band--5 { background: var(--b5); border-top: 1px solid var(--h5); }
+.band--6 { background: var(--b6); border-top: 1px solid var(--h6); }
+.band--7 { background: var(--b7); border-top: 1px solid var(--h7); }
+
+/* alpenglow on the summit band */
+.band--6 {
+  background-image: radial-gradient(120% 90% at 50% 0%,
+    rgba(255, 107, 53, 0.14) 0%, rgba(255, 107, 53, 0) 62%);
+}
+
+.band-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 10.5rem minmax(0, 1fr);
+  gap: 0 2.75rem;
+  align-items: start;
+}
+
+/* left margin carries the real path or status, not a decorative number */
+.gutter {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+.gutter b {
+  display: block;
+  color: var(--amber);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  align-items: flex-start;
+}
+
+/* ── TYPE ── */
+h1, h2, h3 { font-weight: bold; line-height: 1.2; text-wrap: balance; }
+
+h2 { font-size: clamp(1.5rem, 3vw, 1.95rem); color: var(--gold); }
+h3 { font-size: clamp(1.2rem, 2.3vw, 1.45rem); color: var(--gold); }
+
+p { max-width: 64ch; color: var(--muted); }
+p strong { color: var(--text); font-weight: normal; }
+
+/* ── MASTHEAD ── */
+.mast-id { display: flex; align-items: center; gap: 1.6rem; flex-wrap: wrap; }
+
+.logo-disk {
+  flex: 0 0 auto;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 34px rgba(255, 140, 42, 0.30), 0 0 8px rgba(255, 179, 71, 0.18);
+}
+.logo-disk svg { width: 100%; height: 100%; }
+
+h1 {
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  letter-spacing: 0.03em;
+  color: var(--text);
+}
+.amber { color: var(--amber); }
+
+.tagline {
+  margin-top: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lead { font-size: 1.02rem; }
+
+/* ── LINKS ── */
+.links { display: flex; flex-wrap: wrap; gap: 1.3rem; font-family: var(--font-mono); font-size: 0.76rem; }
+
+.links a {
+  color: var(--muted);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s, border-color 0.2s;
+}
+.links a:hover { color: var(--amber); border-color: var(--amber); }
+
+.go {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: var(--amber);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s, border-color 0.2s;
+}
+.go:hover { color: var(--gold); border-color: var(--amber); }
+
+/* ── ARCHITECTURE DIAGRAM ── */
+.diagram {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg2);
+}
+.diagram img { min-width: 720px; width: 100%; }
+
+/* ── PULL QUOTE — the one lifted block on the page ── */
+.pull {
+  border-left: 2px solid var(--coral);
+  padding: 0.15rem 0 0.15rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.pull p:first-child { color: var(--text); font-size: 1.05rem; max-width: 66ch; }
+.pull p { max-width: 66ch; }
+
+/* ── PROJECT BANDS ── */
+.project {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+  gap: 2.25rem;
+  align-items: start;
+}
+.project--flip > .shot { order: -1; }
+
+.shot {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg3);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.shot img { width: 100%; height: 100%; object-fit: contain; opacity: 0.9; }
+
+/* ── ROADMAP ── */
+.roadmap { display: flex; flex-direction: column; gap: 1.15rem; width: 100%; max-width: 68ch; }
+
+.road-item {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0 1.1rem;
+  align-items: baseline;
+}
+.road-item h3 { font-size: 1.02rem; margin-bottom: 0.15rem; }
+.road-item p { font-size: 0.93rem; }
+
+.status {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding-top: 0.35rem;
+}
+.status--next      { color: var(--coral); }
+.status--planned   { color: var(--amber); }
+.status--exploring { color: var(--muted); }
+.status--deferred  { color: var(--border-hover); }
+
+/* ── COLOPHON ── */
+.elevation { width: 100%; max-width: 640px; }
+.elevation svg { width: 100%; height: auto; font-family: var(--font-mono); }
+
+.colophon {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+/* ── RESPONSIVE ── */
+
+/* tablet — gutter moves above the content */
+@media (max-width: 840px) {
+  .band-inner { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
+  .gutter b { display: inline; margin-right: 0.6rem; }
+}
+
+/* narrow — project image stacks under the text */
+@media (max-width: 960px) {
+  .project { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
+  .project--flip > .shot { order: 0; }
+}
+
+/* phone */
+@media (max-width: 540px) {
+  .logo-disk { width: 68px; height: 68px; }
+  .mast-id { gap: 1rem; }
+  .road-item { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
+  .status { padding-top: 0; }
+  .diagram img { min-width: 560px; }
+}
