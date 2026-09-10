@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/jsbmac5/data542.com/
+    - /bin/cp -r * $DEPLOYPATH
+    - /bin/cp .htaccess $DEPLOYPATH
