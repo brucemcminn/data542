@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Platform Architecture — data542.com</title>
+<title>Platform Architecture | data542.com</title>
 <style>
   :root{
     --bg:#0e0c20; --bg2:#141230; --bg3:#1c1840;
@@ -40,34 +40,34 @@
     <span class="sub">data542.com · a shared data foundation</span>
   </h1>
 
-  <p class="lead">Every project on this site runs on a shared AWS foundation: scheduled compute jobs ingest data from external APIs, land it in Amazon S3, and refine it through staged layers, with Amazon CloudFront serving the curated output to Power BI reports embedded here. EventBridge handles all scheduling. Compute is matched to the workload — short ingestion and transformation jobs run on Lambda, while longer-running scans run as Fargate container tasks. Projects share a single S3 bucket, separated by prefix and governed by IAM roles scoped to each project's own data. The platform currently supports two production pipelines — a weather station feed, live since early 2025, and a daily equities scanner — with further projects planned on the same foundation.</p>
+  <p class="lead">Every project on this site runs on a shared AWS foundation: scheduled compute jobs ingest data from external APIs, land it in Amazon S3, and refine it through staged layers, with Amazon CloudFront serving the curated output to Power BI reports embedded here. EventBridge handles all scheduling. Compute is matched to the workload. Short ingestion and transformation jobs run on Lambda, while longer-running scans run as Fargate container tasks. Projects share a single S3 bucket, separated by prefix and governed by IAM roles scoped to each project's own data. The platform currently supports two production pipelines, a weather station feed live since early 2025 and a daily equities scanner, with further projects planned on the same foundation.</p>
 
   <figure>
     <img src="data542-current-architecture.svg" alt="Current architecture: Tempest weather and Swing Trader pipelines feeding a shared S3 lake, served through CloudFront to Power BI.">
-    <figcaption>Current architecture — the two production pipelines on the shared foundation.</figcaption>
+    <figcaption>Current architecture: the two production pipelines on the shared foundation.</figcaption>
   </figure>
 
   <h2>The Lake Pattern</h2>
 
-  <p>The projects here share one data lake design: a medallion architecture, with layers named for what they do rather than for the metals. The Tempest weather pipeline implements it fully. Raw observations land from the WeatherFlow API exactly as received — bronze, in medallion terms — giving every downstream step a replayable source of record. A cleaning pass repairs structural defects without touching granularity, producing the silver layer at the station's native 1-minute resolution. A final aggregation builds a 5-minute materialized view — the gold layer — which is the only layer Power BI ever reads: roughly 272,000 pre-aggregated rows instead of millions, cheap to cache and fast to refresh.</p>
+  <p>The projects here share one data lake design: a medallion architecture, with layers named for what they do rather than for the metals. The Tempest weather pipeline implements it fully. Raw observations land from the WeatherFlow API exactly as received (bronze, in medallion terms), giving every downstream step a replayable source of record. A cleaning pass repairs structural defects without touching granularity, producing the silver layer at the station's native 1-minute resolution. A final aggregation builds a 5-minute materialized view, the gold layer, which is the only layer Power BI ever reads: roughly 272,000 pre-aggregated rows instead of millions, cheap to cache and fast to refresh.</p>
 
   <p>The Swing Trader pipeline follows the same pattern with thinner layers, as its workload warrants: a daily scanner appends to a growing scan history that serves as both record and reporting source. Not every dataset earns three layers, and forcing the full structure onto a small pipeline would be ceremony rather than architecture.</p>
 
-  <p>One deliberate deviation is worth naming. When a failed wind sensor produced a month of bad readings, the fix was applied surgically in the reporting layer — nulling only the affected fields for the affected month — rather than rebuilding the silver layer. A purist would push that correction into the lake; shipping it at the reporting layer preserved the raw record, fixed the published data the same day, and left a clean path to promote the fix upstream later. Knowing where to deviate from the textbook, and keeping the deviation documented and reversible, is most of what the pattern is for.</p>
+  <p>One deliberate deviation is worth naming. When a failed wind sensor produced a month of bad readings, the fix was applied surgically in the reporting layer, nulling only the affected fields for the affected month, rather than rebuilding the silver layer. A purist would push that correction into the lake; shipping it at the reporting layer preserved the raw record, fixed the published data the same day, and left a clean path to promote the fix upstream later. Knowing where to deviate from the textbook, and keeping the deviation documented and reversible, is most of what the pattern is for.</p>
 
   <h2>Architecture Decisions</h2>
 
   <h3>Compute is matched to the workload, not standardized on one service.</h3>
-  <p>The weather pipeline's ingestion, cleaning, and aggregation jobs each run in seconds to minutes, so they run on Lambda — no infrastructure to manage, billed by the millisecond. The market scanner processes hundreds of symbols and can exceed Lambda's 15-minute execution ceiling, so it runs as a containerized Fargate task instead. A single compute standard would be simpler to describe and worse to operate; the platform accepts two patterns because the workloads genuinely differ.</p>
+  <p>The weather pipeline's ingestion, cleaning, and aggregation jobs each run in seconds to minutes, so they run on Lambda: no infrastructure to manage, billed by the millisecond. The market scanner processes hundreds of symbols and can exceed Lambda's 15-minute execution ceiling, so it runs as a containerized Fargate task instead. A single compute standard would be simpler to describe and worse to operate; the platform accepts two patterns because the workloads genuinely differ.</p>
 
   <h3>Incremental loads advance a watermark only on success.</h3>
-  <p>Each ingestion job reads a small control file recording where the last successful run ended, fetches forward from that point, and updates the control file only after everything lands. A failed run changes nothing — recovery is simply the next scheduled run, which picks up where the last good one stopped. No manual backfills, no duplicate windows, no partial state to untangle.</p>
+  <p>Each ingestion job reads a small control file recording where the last successful run ended, fetches forward from that point, and updates the control file only after everything lands. A failed run changes nothing; recovery is simply the next scheduled run, which picks up where the last good one stopped. No manual backfills, no duplicate windows, no partial state to untangle.</p>
 
   <h3>Time is converted with explicit offsets, not environment defaults.</h3>
-  <p>Power BI's built-in local-time conversion depends on the timezone of whatever machine evaluates the query — correct on a desktop in Bellingham, wrong when the service refreshes in a data center elsewhere. Timestamps are instead converted from UTC with explicit, rule-based offsets, so the report produces identical results wherever it runs. Environment-dependent behavior in a published data product is a defect waiting for a deployment to reveal it.</p>
+  <p>Power BI's built-in local-time conversion depends on the timezone of whatever machine evaluates the query: correct on a desktop in Bellingham, wrong when the service refreshes in a data center elsewhere. Timestamps are instead converted from UTC with explicit, rule-based offsets, so the report produces identical results wherever it runs. Environment-dependent behavior in a published data product is a defect waiting for a deployment to reveal it.</p>
 
   <h3>The shared data catalog is deliberately deferred.</h3>
-  <p>A common bucket convention and an AWS Glue Data Catalog across all projects are on the roadmap, but building them now — before the next project exists — would mean designing for workloads that haven't taken shape and likely refactoring twice. The catalog work is sequenced to begin once the third pipeline is underway, when its real requirements can inform the design. Knowing what not to build yet is an architecture decision too.</p>
+  <p>A common bucket convention and an AWS Glue Data Catalog across all projects are on the roadmap, but building them now, before the next project exists, would mean designing for workloads that haven't taken shape and likely refactoring twice. The catalog work is sequenced to begin once the third pipeline is underway, when its real requirements can inform the design. Knowing what not to build yet is an architecture decision too.</p>
 
   <h2>Roadmap</h2>
 
@@ -75,17 +75,17 @@
 
   <p class="roadmap-item"><span class="label live">Live: Swing Trader.</span> A containerized daily scan of high-volatility NASDAQ equities using ATR, RSI, Supertrend, and volume rules, appending to a growing scan history. The universe of scanned symbols rebuilds weekly; scans run each weekday after market close, with the Power BI report embedded on this site.</p>
 
-  <p class="roadmap-item"><span class="label">Next: Best Washington Sunset.</span> A one-time terrain analysis of west-facing viewpoints around Puget Sound — computing sunset azimuth against horizon profiles derived from USGS elevation data — to rank, for any date, which site offers the latest visible sunset and the longest civil twilight. Its heavy computation runs once, offline; the report reads a static result table, a deliberately different shape from the two scheduled pipelines.</p>
+  <p class="roadmap-item"><span class="label">Next: Best Washington Sunset.</span> A one-time terrain analysis of west-facing viewpoints around Puget Sound, computing sunset azimuth against horizon profiles derived from USGS elevation data, to rank, for any date, which site offers the latest visible sunset and the longest civil twilight. Its heavy computation runs once, offline; the report reads a static result table, a deliberately different shape from the two scheduled pipelines.</p>
 
   <p class="roadmap-item"><span class="label">Planned: FOREX modernization.</span> An early exploratory notebook on Euro exchange rates, rebuilt on the platform with a currency-pair selector, multiple timescales, and a three-dimensional volatility visualization across twenty pairs.</p>
 
-  <p class="roadmap-item"><span class="label">Exploring: Marine Telemetry.</span> An NMEA 2000 gateway will capture live data from an outboard engine and onboard instruments — fuel flow, heading, position — during time on the water. Unlike the platform's scheduled API pipelines, this data originates at the edge, collected in intermittent sessions and batch-uploaded to the lake afterward. Early analysis targets include fuel-efficiency curves by speed, and cross-referencing heading against position to estimate the effect of current.</p>
+  <p class="roadmap-item"><span class="label">Exploring: Marine Telemetry.</span> An NMEA 2000 gateway will capture live data from an outboard engine and onboard instruments (fuel flow, heading, position) during time on the water. Unlike the platform's scheduled API pipelines, this data originates at the edge, collected in intermittent sessions and batch-uploaded to the lake afterward. Early analysis targets include fuel-efficiency curves by speed, and cross-referencing heading against position to estimate the effect of current.</p>
 
   <p class="roadmap-item"><span class="label">Deferred by design: the shared catalog.</span> The common bucket convention and Glue Data Catalog described in the decisions above, sequenced to begin once the Sunset project's requirements are concrete.</p>
 
   <figure>
     <img src="data542-target-architecture.svg" alt="Target architecture: all five projects as lanes feeding the shared lake, with live and planned routes and a planned Glue Data Catalog spanning the bucket.">
-    <figcaption>Target architecture — the full estate, with planned routes shown alongside what runs today.</figcaption>
+    <figcaption>Target architecture: the full estate, with planned routes shown alongside what runs today.</figcaption>
   </figure>
 
 </div>

@@ -1,5 +1,5 @@
 /* ============================================================
-   data542.com — styles.css
+   data542.com - styles.css
 
    Layout: seven full-bleed horizontal bands read as the climb
    of State Route 542, from Bellingham Bay at sea level to
@@ -21,7 +21,7 @@
   --text:         #e8e0f0;
   --muted:        #9b92c0;
 
-  /* the climb — band grounds, sea level to summit */
+  /* the climb - band grounds, sea level to summit */
   --b1: #08061a;
   --b2: #0e0c20;
   --b3: #131031;
@@ -30,7 +30,7 @@
   --b6: #25183a;
   --b7: #0c0a1c;
 
-  /* horizon rules — indigo through coral to gold */
+  /* horizon rules - indigo through coral to gold */
   --h2: #2e2660;
   --h3: #3a2a6e;
   --h4: #6b3f6a;
@@ -189,7 +189,7 @@ h1 {
 }
 .diagram img { min-width: 720px; width: 100%; }
 
-/* ── PULL QUOTE — the one lifted block on the page ── */
+/* ── PULL QUOTE - the one lifted block on the page ── */
 .pull {
   border-left: 2px solid var(--coral);
   padding: 0.15rem 0 0.15rem 1.5rem;
@@ -258,13 +258,13 @@ h1 {
 
 /* ── RESPONSIVE ── */
 
-/* tablet — gutter moves above the content */
+/* tablet - gutter moves above the content */
 @media (max-width: 840px) {
   .band-inner { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; }
   .gutter b { display: inline; margin-right: 0.6rem; }
 }
 
-/* narrow — project image stacks under the text */
+/* narrow - project image stacks under the text */
 @media (max-width: 960px) {
   .project { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
   .project--flip > .shot { order: 0; }

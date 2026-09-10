@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>data542 — Bruce McMinn</title>
-  <meta name="description" content="Bruce McMinn — data architecture and engineering near Bellingham, WA. A shared AWS foundation running a live weather pipeline and a daily equities scanner."/>
-  <meta property="og:title" content="data542 — Bruce McMinn"/>
+  <title>data542 | Bruce McMinn</title>
+  <meta name="description" content="Bruce McMinn, data architecture and engineering near Bellingham, WA. A shared AWS foundation running a live weather pipeline and a daily equities scanner."/>
+  <meta property="og:title" content="data542 | Bruce McMinn"/>
   <meta property="og:description" content="Every project on this site runs on a shared AWS foundation. Two production pipelines run on it today."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://data542.com/"/>
@@ -60,13 +60,13 @@
         </div>
         <div>
           <h1>data<span class="amber">542</span></h1>
-          <p class="tagline">Bruce McMinn &mdash; Data Architecture &amp; Engineering</p>
+          <p class="tagline">Bruce McMinn, Data Architecture &amp; Engineering</p>
         </div>
       </div>
 
-      <p class="lead"><strong>I build data pipelines and the reporting on top of them, for a
+      <p class="lead"><strong>I build data pipelines and the reporting on top of them for a
          university business intelligence team.</strong> This site is a personal data architecture
-         project &mdash; the same kind of work, done end to end on AWS with data I collect myself,
+         project: the same kind of work, done end to end on AWS with data I collect myself,
          so every decision from ingestion to the published report is one I made and can explain.
          Two pipelines run in production, a Tempest weather station and a daily equities scanner.
          A third project, twenty years of Euro exchange-rate volatility, is earlier analysis work
@@ -92,7 +92,7 @@
       <h2>The lake pattern</h2>
       <p>The projects here share one data lake design: a medallion architecture, with layers named
          for what they do rather than for the metals. Compute is matched to the workload, not
-         standardized on one service &mdash; short ingestion and transformation jobs run on Lambda,
+         standardized on one service. Short ingestion and transformation jobs run on Lambda,
          while longer-running scans run as Fargate container tasks. Projects share a single S3
          bucket, separated by prefix and governed by IAM roles scoped to each project's own data.</p>
 
@@ -104,8 +104,8 @@
 
       <blockquote class="pull">
         <p>When a failed wind sensor produced a month of bad readings, the fix was applied
-           surgically in the reporting layer &mdash; nulling only the affected fields for the
-           affected month &mdash; rather than rebuilding the silver layer.</p>
+           surgically in the reporting layer, nulling only the affected fields for the
+           affected month, rather than rebuilding the silver layer.</p>
         <p>A purist would push that correction into the lake; shipping it at the reporting layer
            preserved the raw record, fixed the published data the same day, and left a clean path
            to promote the fix upstream later. Knowing where to deviate from the textbook, and
@@ -128,7 +128,7 @@
         <p>Raw observations land from the WeatherFlow API exactly as received, giving every
            downstream step a replayable source of record. A cleaning pass repairs structural
            defects without touching granularity, at the station's native 1-minute resolution.
-           A final aggregation builds a 5-minute materialized view &mdash; <strong>the only layer
+           A final aggregation builds a 5-minute materialized view, <strong>the only layer
            Power BI ever reads: roughly 272,000 pre-aggregated rows instead of millions</strong>,
            cheap to cache and fast to refresh.</p>
         <a class="go" href="https://app.fabric.microsoft.com/view?r=eyJrIjoiM2NlMWNhZGQtOWRiYS00ZGYwLTg3ZWEtZWNmZjdmNDEzMzdmIiwidCI6ImI1ZDQ3ZjJkLWU5M2UtNDNkOC1hNWVhLTEyZDAyM2RiOGNkYSJ9"
@@ -175,7 +175,7 @@
         <h3>Euro on FOREX</h3>
         <p>An early exploratory notebook: twenty years of Euro exchange rate volatility across forty
            currencies, geopolitical events mapped against market movement, and an animated annual
-           volatility world map. It predates the platform &mdash; a rebuild on it is on the roadmap
+           volatility world map. It predates the platform; a rebuild on it is on the roadmap
            below.</p>
         <a class="go" href="assets/notebooks/euro-forex/" target="_blank" rel="noopener">View the notebook &rarr;</a>
       </div>
@@ -199,9 +199,9 @@
           <div class="status status--next">Next</div>
           <div>
             <h3>Best Washington Sunset</h3>
-            <p>A one-time terrain analysis of west-facing viewpoints around Puget Sound &mdash;
-               computing sunset azimuth against horizon profiles derived from USGS elevation data
-               &mdash; to rank, for any date, which site offers the latest visible sunset and the
+            <p>A one-time terrain analysis of west-facing viewpoints around Puget Sound,
+               computing sunset azimuth against horizon profiles derived from USGS elevation data,
+               to rank, for any date, which site offers the latest visible sunset and the
                longest civil twilight. Its heavy computation runs once, offline; the report reads a
                static result table, a deliberately different shape from the two scheduled pipelines.</p>
           </div>
@@ -221,7 +221,7 @@
           <div>
             <h3>Marine Telemetry</h3>
             <p>An NMEA 2000 gateway capturing live data from an outboard engine and onboard
-               instruments &mdash; fuel flow, heading, position &mdash; during time on the water.
+               instruments (fuel flow, heading, position) during time on the water.
                Unlike the platform's scheduled API pipelines, this data originates at the edge,
                collected in intermittent sessions and batch-uploaded to the lake afterward. Early
                targets: fuel-efficiency curves by speed, and cross-referencing heading against
@@ -232,7 +232,7 @@
         <div class="road-item">
           <div class="status status--deferred">Deferred</div>
           <div>
-            <h3>The shared catalog &mdash; by design</h3>
+            <h3>The shared catalog: by design</h3>
             <p>A common bucket convention and a Glue Data Catalog across all projects, sequenced to
                begin once the Sunset project's requirements are concrete. Building them before the
                next project exists would mean designing for workloads that haven't taken shape.

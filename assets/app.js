@@ -1,5 +1,5 @@
-/* data542.com — app.js
-   Minimal JS — the accordion is pure HTML/CSS.
+/* data542.com - app.js
+   Minimal JS - the accordion is pure HTML/CSS.
    This file is here for future use (e.g. Power BI embed tokens,
    contact form handling, analytics). */
 
