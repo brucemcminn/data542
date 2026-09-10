@@ -40,7 +40,7 @@
     <span class="sub">data542.com · a shared data foundation</span>
   </h1>
 
-  <p class="lead">Every project on this site runs on a shared AWS foundation: scheduled compute jobs ingest data from external APIs, land it in Amazon S3, and refine it through staged layers, with Amazon CloudFront serving the curated output to Power BI reports embedded here. EventBridge handles all scheduling. Compute is matched to the workload — short ingestion and transformation jobs run on Lambda, while longer-running scans run as Fargate container tasks. Projects share a single S3 bucket, separated by prefix and governed by IAM roles scoped to each project's own data. The platform currently supports two production pipelines — a weather station feed updating nightly since 2023 and a daily equities scanner — with further projects planned on the same foundation.</p>
+  <p class="lead">Every project on this site runs on a shared AWS foundation: scheduled compute jobs ingest data from external APIs, land it in Amazon S3, and refine it through staged layers, with Amazon CloudFront serving the curated output to Power BI reports embedded here. EventBridge handles all scheduling. Compute is matched to the workload — short ingestion and transformation jobs run on Lambda, while longer-running scans run as Fargate container tasks. Projects share a single S3 bucket, separated by prefix and governed by IAM roles scoped to each project's own data. The platform currently supports two production pipelines — a weather station feed, live since early 2025, and a daily equities scanner — with further projects planned on the same foundation.</p>
 
   <figure>
     <img src="data542-current-architecture.svg" alt="Current architecture: Tempest weather and Swing Trader pipelines feeding a shared S3 lake, served through CloudFront to Power BI.">
@@ -71,7 +71,7 @@
 
   <h2>Roadmap</h2>
 
-  <p class="roadmap-item"><span class="label live">Live: Tempest Weather.</span> The full medallion pipeline, updating nightly since 2023, with the Power BI report embedded on this site.</p>
+  <p class="roadmap-item"><span class="label live">Live: Tempest Weather.</span> The full medallion pipeline, live since early 2025, with the Power BI report embedded on this site.</p>
 
   <p class="roadmap-item"><span class="label live">Live: Swing Trader.</span> A containerized daily scan of high-volatility NASDAQ equities using ATR, RSI, Supertrend, and volume rules, appending to a growing scan history. The universe of scanned symbols rebuilds weekly; scans run each weekday after market close, with the Power BI report embedded on this site.</p>
 
