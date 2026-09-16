@@ -66,12 +66,12 @@
 
       <p class="lead"><strong>I build data pipelines and the reporting on top of them for a
          university business intelligence team.</strong> This site is a personal data architecture
-         project: the same kind of work, done end to end on AWS with data I collect myself,
-         so every decision from ingestion to the published report is one I made and can explain.
-         Two pipelines run in production, a Tempest weather station and a daily equities scanner.
-         A third project, twenty years of Euro exchange-rate volatility, is earlier analysis work
-         in Python from 2022, and the notebook is posted here. The rest of the site is what's
-         planned on the same foundation.</p>
+         project: the same kind of work, done end to end on AWS with data I collect myself. Every
+         decision, from ingestion to the published report, is one I made and can explain. Two
+         pipelines run in production, a Tempest weather station and a daily equities scanner. A
+         third project, twenty years of Euro exchange-rate volatility, is earlier analysis work in
+         Python from 2022. The notebook is posted here. Future projects planned on the same
+         foundation are listed as well.</p>
 
       <nav class="links">
         <a href="https://www.linkedin.com/in/bruce-mcminn/" target="_blank" rel="noopener">LinkedIn</a>
@@ -86,15 +86,22 @@
 <!-- ═════ BAND 2 · THE PLATFORM ═════ -->
 <section class="band band--2">
   <div class="band-inner">
-    <div class="gutter"><b>Platform</b>s3://tempestdata-data542</div>
+    <div class="gutter"><b>Platform</b>aws us-west-2</div>
     <div class="stack">
 
       <h2>The lake pattern</h2>
-      <p>The projects here share one data lake design: a medallion architecture, with layers named
-         for what they do rather than for the metals. Compute is matched to the workload, not
-         standardized on one service. Short ingestion and transformation jobs run on Lambda,
-         while longer-running scans run as Fargate container tasks. Projects share a single S3
-         bucket, separated by prefix and governed by IAM roles scoped to each project's own data.</p>
+      <p>Every project lands in the same S3 bucket, each under its own prefix, with IAM roles
+         scoped to its own data. Each keeps a control prefix recording where its last successful
+         run ended, written only after the data lands, so a failed run changes nothing and the next
+         one resumes from the last good point. Compute is chosen per job rather than standardized:
+         the weather station's short jobs run on Lambda, and the daily equities scan runs longer
+         than Lambda allows, so it runs as a Fargate container. EventBridge schedules both, and
+         Power BI reads the results through CloudFront.</p>
+
+      <p>Two pipelines run this way today. The Euro study below is next on the platform. It runs
+         now from a frozen dataset that stops in 2020; rebuilt here, it pulls from the source that
+         publishes those rates daily. A one-time terrain calculation and engine telemetry collected
+         offline come later.</p>
 
       <figure class="diagram">
         <img src="data542-current-architecture.svg"
@@ -102,17 +109,8 @@
              loading="lazy"/>
       </figure>
 
-      <blockquote class="pull">
-        <p>When a failed wind sensor produced a month of bad readings, the fix was applied
-           surgically in the reporting layer, nulling only the affected fields for the
-           affected month, rather than rebuilding the silver layer.</p>
-        <p>A purist would push that correction into the lake; shipping it at the reporting layer
-           preserved the raw record, fixed the published data the same day, and left a clean path
-           to promote the fix upstream later. Knowing where to deviate from the textbook, and
-           keeping the deviation documented and reversible, is most of what the pattern is for.</p>
-      </blockquote>
 
-      <a class="go" href="architecture.html">Architecture decisions, in full &rarr;</a>
+      <a class="go" href="architecture.html">Architecture decisions, in full</a>
 
     </div>
   </div>
@@ -132,7 +130,7 @@
            Power BI ever reads: roughly 272,000 pre-aggregated rows instead of millions</strong>,
            cheap to cache and fast to refresh.</p>
         <a class="go" href="https://app.fabric.microsoft.com/view?r=eyJrIjoiM2NlMWNhZGQtOWRiYS00ZGYwLTg3ZWEtZWNmZjdmNDEzMzdmIiwidCI6ImI1ZDQ3ZjJkLWU5M2UtNDNkOC1hNWVhLTEyZDAyM2RiOGNkYSJ9"
-           target="_blank" rel="noopener">View the live report &rarr;</a>
+           target="_blank" rel="noopener">View the live report</a>
       </div>
       <figure class="shot">
         <img src="assets/img/weather-thumb.png" alt="WeatherFlow Live Dashboard in Power BI"
@@ -156,7 +154,7 @@
            processes hundreds of symbols and can exceed Lambda's 15-minute execution ceiling.
            A single compute standard would be simpler to describe and worse to operate.</p>
         <a class="go" href="https://app.fabric.microsoft.com/view?r=eyJrIjoiNzk1MDYxOTEtODU3NC00NzkwLTlhMzktYjk4NTI5NTRjNzI0IiwidCI6ImI1ZDQ3ZjJkLWU5M2UtNDNkOC1hNWVhLTEyZDAyM2RiOGNkYSJ9"
-           target="_blank" rel="noopener">View the scan &rarr;</a>
+           target="_blank" rel="noopener">View the scan</a>
       </div>
       <figure class="shot">
         <img src="assets/img/swingtrader-thumb.png" alt="Swing Trader nightly scan in Power BI"
@@ -177,7 +175,7 @@
            currencies, geopolitical events mapped against market movement, and an animated annual
            volatility world map. It predates the platform; a rebuild on it is on the roadmap
            below.</p>
-        <a class="go" href="assets/notebooks/euro-forex/" target="_blank" rel="noopener">View the notebook &rarr;</a>
+        <a class="go" href="assets/notebooks/euro-forex/" target="_blank" rel="noopener">View the notebook</a>
       </div>
       <figure class="shot">
         <img src="assets/img/forex-thumb.png" alt="Euro on FOREX annual volatility world map"
