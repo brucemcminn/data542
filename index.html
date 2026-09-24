@@ -150,8 +150,7 @@
            and volume rules, appending to a growing scan history. The universe of scanned symbols
            rebuilds weekly; scans run each weekday after market close.</p>
         <p><strong>It runs on Fargate rather than Lambda for a specific reason:</strong> the scanner
-           processes hundreds of symbols and can exceed Lambda's 15-minute execution ceiling.
-           A single compute standard would be simpler to describe and worse to operate.</p>
+           processes hundreds of symbols and can exceed Lambda's 15-minute execution ceiling.</p>
         <a class="go" href="https://app.fabric.microsoft.com/view?r=eyJrIjoiNzk1MDYxOTEtODU3NC00NzkwLTlhMzktYjk4NTI5NTRjNzI0IiwidCI6ImI1ZDQ3ZjJkLWU5M2UtNDNkOC1hNWVhLTEyZDAyM2RiOGNkYSJ9"
            target="_blank" rel="noopener">View the scan</a>
       </div>
@@ -231,11 +230,11 @@
         <div class="road-item">
           <div class="status status--deferred">Deferred</div>
           <div>
-            <h3>The shared catalog: by design</h3>
-            <p>A common bucket convention and a Glue Data Catalog across all projects, sequenced to
-               begin once the Sunset project's requirements are concrete. Building them before the
-               next project exists would mean designing for workloads that haven't taken shape.
-               Knowing what not to build yet is an architecture decision too.</p>
+            <h3>Shared data catalog</h3>
+            <p>A Glue Data Catalog and a common folder layout across all projects, so any project's
+               data can be found and queried the same way. With only two pipelines running, the
+               design would be guesswork. The work starts once the Sunset project's requirements
+               are clear.</p>
           </div>
         </div>
 
