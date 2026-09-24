@@ -50,7 +50,7 @@
 
   <h2>The Lake Pattern</h2>
 
-  <p>The projects here share one data lake design: a medallion architecture, with layers named for what they do rather than for the metals. The Tempest weather pipeline implements it fully. Raw observations land from the WeatherFlow API exactly as received (bronze, in medallion terms), giving every downstream step a replayable source of record. A cleaning pass repairs structural defects without touching granularity, producing the silver layer at the station's native 1-minute resolution. A final aggregation builds a 5-minute materialized view, the gold layer, which is the only layer Power BI ever reads: roughly 272,000 pre-aggregated rows instead of millions, cheap to cache and fast to refresh.</p>
+  <p>The projects here share one data lake design, a medallion architecture. The Tempest weather pipeline implements it fully. Raw observations from the WeatherFlow API land in the bronze layer exactly as received, giving every downstream step a replayable source of record. A cleaning pass repairs structural defects without touching granularity, producing the silver layer at the station's native 1-minute resolution. A final aggregation builds a 5-minute materialized view, the gold layer, which is the only layer Power BI ever reads: roughly 272,000 pre-aggregated rows instead of millions, cheap to cache and fast to refresh.</p>
 
   <p>The Swing Trader pipeline follows the same pattern with thinner layers, as its workload warrants: a daily scanner appends to a growing scan history that serves as both record and reporting source. The scan history is small and read directly, so separate cleaning and aggregation layers would add steps without changing the report.</p>
 
