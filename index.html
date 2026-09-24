@@ -11,6 +11,7 @@
   <meta property="og:url" content="https://data542.com/"/>
   <meta property="og:image" content="https://data542.com/assets/img/logo.png"/>
   <link rel="stylesheet" href="assets/styles.css"/>
+  <link rel="stylesheet" href="assets/zoom.css"/>
   <link rel="icon" type="image/png" href="assets/img/logo.png"/>
 </head>
 <body>
@@ -98,13 +99,11 @@
          than Lambda allows, so it runs as a Fargate container. EventBridge schedules both, and
          Power BI reads the results through CloudFront.</p>
 
-      <p>Two pipelines run this way today. The Euro study below is next on the platform. It runs
-         now from a frozen dataset that stops in 2020; rebuilt here, it pulls from the source that
-         publishes those rates daily. A one-time terrain calculation and engine telemetry collected
-         offline come later.</p>
+      <p>Two pipelines run on the platform today, the weather station and the equities scanner.
+         The roadmap below lists the projects planned next and how each one differs from these two.</p>
 
       <figure class="diagram">
-        <img src="data542-current-architecture.svg"
+        <img src="data542-current-architecture.svg" data-zoom
              alt="data542 platform architecture: Tempest and market data flow through Lambda and Fargate into an S3 medallion lake, then out via CloudFront to Power BI"
              loading="lazy"/>
       </figure>
@@ -209,8 +208,10 @@
           <div class="status status--planned">Planned</div>
           <div>
             <h3>FOREX modernization</h3>
-            <p>The exploratory notebook rebuilt on the platform, with a currency-pair selector,
-               multiple timescales, and a three-dimensional volatility visualization across twenty pairs.</p>
+            <p>The exploratory notebook rebuilt on the platform. The notebook's dataset ends in 2020;
+               the rebuild pulls rates from the source that publishes them daily, and adds a
+               currency-pair selector, multiple timescales, and a three-dimensional volatility
+               visualization across twenty pairs.</p>
           </div>
         </div>
 

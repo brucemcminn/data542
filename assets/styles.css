@@ -200,26 +200,27 @@ h1 {
 .pull p:first-child { color: var(--text); font-size: 1.05rem; max-width: 66ch; }
 .pull p { max-width: 66ch; }
 
-/* ── PROJECT BANDS ── */
+/* ── PROJECT BANDS ──
+   Every project image gets the same frame width; flipped bands
+   mirror the column order so the image size never changes. */
 .project {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 32rem);
   gap: 2.25rem;
   align-items: start;
 }
+.project--flip { grid-template-columns: minmax(0, 32rem) minmax(0, 1fr); }
 .project--flip > .shot { order: -1; }
 
 .shot {
+  width: 100%;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg3);
   overflow: hidden;
   aspect-ratio: 16 / 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-.shot img { width: 100%; height: 100%; object-fit: contain; opacity: 0.9; }
+.shot img { width: 100%; height: 100%; object-fit: cover; opacity: 0.92; }
 
 /* ── ROADMAP ── */
 .roadmap { display: flex; flex-direction: column; gap: 1.15rem; width: 100%; max-width: 68ch; }
@@ -266,7 +267,8 @@ h1 {
 
 /* narrow - project image stacks under the text */
 @media (max-width: 960px) {
-  .project { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
+  .project,
+  .project--flip { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
   .project--flip > .shot { order: 0; }
 }
 

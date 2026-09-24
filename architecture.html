@@ -32,6 +32,7 @@
   .roadmap-item .label.live{color:var(--gold);}
   hr{border:none;border-top:1px solid var(--border);margin:2.4rem 0;}
 </style>
+<link rel="stylesheet" href="assets/zoom.css">
 </head>
 <body>
 <div class="wrap">
@@ -43,7 +44,7 @@
   <p class="lead">Every project on this site runs on a shared AWS foundation: scheduled compute jobs ingest data from external APIs, land it in Amazon S3, and refine it through staged layers, with Amazon CloudFront serving the curated output to Power BI reports embedded here. EventBridge handles all scheduling. Compute is matched to the workload. Short ingestion and transformation jobs run on Lambda, while longer-running scans run as Fargate container tasks. Projects share a single S3 bucket, separated by prefix and governed by IAM roles scoped to each project's own data. The platform currently supports two production pipelines, a weather station feed live since early 2025 and a daily equities scanner, with further projects planned on the same foundation.</p>
 
   <figure>
-    <img src="data542-current-architecture.svg" alt="Current architecture: Tempest weather and Swing Trader pipelines feeding a shared S3 lake, served through CloudFront to Power BI.">
+    <img src="data542-current-architecture.svg" data-zoom alt="Current architecture: Tempest weather and Swing Trader pipelines feeding a shared S3 lake, served through CloudFront to Power BI.">
     <figcaption>Current architecture: the two production pipelines on the shared foundation.</figcaption>
   </figure>
 
@@ -84,10 +85,11 @@
   <p class="roadmap-item"><span class="label">Deferred by design: the shared catalog.</span> The common bucket convention and Glue Data Catalog described in the decisions above, sequenced to begin once the Sunset project's requirements are concrete.</p>
 
   <figure>
-    <img src="data542-target-architecture.svg" alt="Target architecture: all five projects as lanes feeding the shared lake, with live and planned routes and a planned Glue Data Catalog spanning the bucket.">
+    <img src="data542-target-architecture.svg" data-zoom alt="Target architecture: all five projects as lanes feeding the shared lake, with live and planned routes and a planned Glue Data Catalog spanning the bucket.">
     <figcaption>Target architecture: the full estate, with planned routes shown alongside what runs today.</figcaption>
   </figure>
 
 </div>
+<script src="assets/app.js"></script>
 </body>
 </html>

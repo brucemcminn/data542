@@ -13,10 +13,9 @@
 
   <!-- header -->
   <text x="40" y="52" fill="#9b92c0" font-size="13" letter-spacing="3" font-weight="bold">DATA542 · CURRENT ARCHITECTURE</text>
-  <text x="1160" y="52" fill="#5a4aaa" font-size="11" text-anchor="end">shared AWS foundation</text>
 
   <!-- ============ LANE EYEBROWS ============ -->
-  <text x="40" y="158" fill="#9b92c0" font-size="10.5" letter-spacing="1.5" font-weight="bold">TEMPEST WEATHER · SINCE 2023</text>
+  <text x="40" y="158" fill="#9b92c0" font-size="10.5" letter-spacing="1.5" font-weight="bold">TEMPEST WEATHER · NIGHTLY LOAD</text>
   <text x="40" y="388" fill="#9b92c0" font-size="10.5" letter-spacing="1.5" font-weight="bold">SWING TRADER · DAILY SCAN</text>
 
   <!-- ============ SOURCES ============ -->
