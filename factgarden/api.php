@@ -38,8 +38,13 @@ try {
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
 } catch (Throwable $e) {
-    error_log('factgarden db connect: ' . $e->getMessage());
-    fail(500, 'Could not reach the database.');
+    $m = $e->getMessage();
+    error_log('factgarden db connect: ' . $m);
+    if (stripos($m, 'could not find driver') !== false) fail(500, 'Could not reach the database: PHP on this server is missing its MySQL driver (pdo_mysql).');
+    if (stripos($m, 'Access denied') !== false)        fail(500, 'Could not reach the database: the db_user or db_pass in config.php is not right.');
+    if (stripos($m, 'Unknown database') !== false)     fail(500, 'Could not reach the database: the database name in the dsn line of config.php is not right.');
+    if ((int)$e->getCode() === 2002)                   fail(500, 'Could not reach the database: MySQL is not answering at the host in the dsn line of config.php.');
+    fail(500, 'Could not reach the database. Code ' . $e->getCode() . '.');
 }
 
 $db->exec("CREATE TABLE IF NOT EXISTS fg_kids (
