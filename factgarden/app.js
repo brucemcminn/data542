@@ -250,6 +250,8 @@ function login(msg){
     e.preventDefault();
     const r=await api("login",{name:n.value,pin:p.value});
     if(!r.ok){document.getElementById("le").textContent=r.error;p.value="";p.focus();return}
+    const c=await api("me");
+    if(!c.ok||!c.kid){document.getElementById("le").textContent="PIN was right, but the browser did not keep the sign-in. Ask a grown-up to check that cookies are allowed.";return}
     lsSet("fg_last",r.kid.name);
     KID=r.kid; S=fix(r.state); home();
   };
@@ -342,6 +344,8 @@ function parentLogin(msg){
     e.preventDefault();
     const r=await api("parent_login",{pass:document.getElementById("pp").value});
     if(!r.ok){document.getElementById("pe").textContent=r.error;return}
+    const c=await api("parent");
+    if(!c.ok||!c.parent){document.getElementById("pe").textContent="Password was right, but the browser did not keep the sign-in. Check that cookies are allowed for this site.";return}
     grownups();
   };
 }

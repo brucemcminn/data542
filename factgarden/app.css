@@ -36,11 +36,14 @@ button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
   font-family:var(--display);font-size:.62rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .cell.s1{background:var(--sprout);color:var(--ink)}
 .cell.s2{background:var(--grow);color:#fff}
-.cell.s3{background:hsl(var(--h,330) 80% 58%);color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.25)}
+.cell.s3{background:linear-gradient(135deg,#ff4d6d 0%,#ff9f1c 18%,#ffd23f 34%,#3ec300 52%,#1fa2ff 70%,#7b5cff 86%,#e0388a 100%);
+  animation:shimmer 4s linear infinite;animation-delay:calc(var(--h,0) * -0.012s);
+  color:#fff;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.55)}
+@keyframes shimmer{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
 .card{border-top:8px solid transparent;background-image:linear-gradient(var(--surface),var(--surface)),var(--rainbow);background-origin:border-box;background-clip:padding-box,border-box}
 .card.right{background-image:linear-gradient(var(--leaf-soft),var(--leaf-soft)),var(--rainbow)}
 .card.wrong{background-image:linear-gradient(var(--miss-soft),var(--miss-soft)),var(--rainbow)}
-.dot.ok{background:hsl(var(--h,330) 80% 58%)}
+.dot.ok{background:conic-gradient(#ff4d6d,#ff9f1c,#ffd23f,#3ec300,#1fa2ff,#7b5cff,#ff4d6d)}
 .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
@@ -48,7 +51,7 @@ button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 .top{display:flex;justify-content:space-between;align-items:center}
 .dots{display:flex;gap:6px;flex-wrap:wrap}
 .dot{width:14px;height:14px;border-radius:50%;background:var(--seed)}
-.dot.ok{background:var(--leaf)} .dot.no{background:var(--miss)}
+.dot.no{background:var(--miss)}
 .card{background:var(--surface);border-radius:24px;padding:28px 16px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;transition:background .2s}
 .card.right{background:var(--leaf-soft)} .card.wrong{background:var(--miss-soft)}
 .prob{font-family:var(--display);font-size:clamp(3rem,15vw,5rem);font-weight:600;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -79,7 +82,7 @@ button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 .speed{display:flex;gap:8px;flex-wrap:wrap}
 .speed button{background:var(--bg);color:var(--ink);font-size:1.05rem;font-weight:600;padding:10px 14px;border-radius:12px;border:2px solid transparent;font-variant-numeric:tabular-nums}
 .speed button.on{border-color:var(--leaf);background:var(--leaf-soft)}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}.card.rainbow{animation:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.card.rainbow,.cell.s3{animation:none}}
 /* sign-in, banner, grown-up screens */
 .banner{background:var(--sun-soft);color:var(--ink);border-radius:14px;padding:10px 14px;font-size:.95rem}
 .field{display:flex;flex-direction:column;gap:6px}

@@ -18,7 +18,10 @@ $configPath = getenv('FG_CONFIG') ?: dirname(__DIR__, 2) . '/factgarden/config.p
 if (!is_file($configPath)) {
     fail(500, 'Server is missing its config file.');
 }
+// Swallow any stray output (like spaces before <?php) so the session cookie can still be sent.
+ob_start();
 $cfg = require $configPath;
+ob_end_clean();
 
 session_name('fgsess');
 session_set_cookie_params([
