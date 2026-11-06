@@ -27,6 +27,7 @@ button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
   background:var(--bg);color:var(--ink);padding:12px 14px;border-radius:14px;border:2px solid transparent;font-family:var(--body)}
 .lv.on{border-color:var(--leaf);background:var(--leaf-soft)}
 .lv.locked{opacity:.5}
+.lv.sub{margin-left:28px}
 .lv b{font-family:var(--display);font-weight:600;font-size:1.05rem}
 .lv .pct{font-family:var(--display);font-variant-numeric:tabular-nums;color:var(--leaf);font-weight:600}
 .bar{grid-column:1/-1;height:8px;border-radius:4px;background:var(--seed);overflow:hidden}

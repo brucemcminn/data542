@@ -7,6 +7,18 @@
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
 
+# ── short link for Fact Garden ───────────────────────────────
+# factgarden.data542.com shares this document root (set up in cPanel
+# Domains) and forwards to the shared page. 302 so the target can change
+# later without browsers holding on to it. .well-known stays reachable
+# so AutoSSL can issue the subdomain's certificate.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^factgarden\.data542\.com$ [NC]
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteRule ^ https://data542.com/factgarden/play/ [R=302,L]
+</IfModule>
+
 # ── cache policy ──────────────────────────────────────────────
 # HTML/CSS/JS revalidate on every request (cheap: a 304 when unchanged),
 # so edits appear immediately. Images cache for a week.

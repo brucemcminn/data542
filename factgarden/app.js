@@ -6,11 +6,13 @@
 "use strict";
 const MODE = window.FG_MODE || "local";
 const API = window.FG_API || "api.php";
+let STANDALONE=false; try{STANDALONE=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){}
 
 // ---------- levels ----------
 const L = [
   {id:"a5",  name:"Adding to 5",          op:"+", gen:()=>pairs(0,5,0,5).filter(([a,b])=>a+b<=5)},
   {id:"a10", name:"Adding to 10",         op:"+", gen:()=>pairs(0,10,0,10).filter(([a,b])=>a+b<=10&&a+b>5)},
+  {id:"dbl", name:"Doubles",              op:"+", sub:true, gen:()=>range(1,10).map(a=>[a,a])},
   {id:"a20", name:"Adding into the teens",op:"+", gen:()=>pairs(2,9,2,9).filter(([a,b])=>a+b>10)},
   {id:"s10", name:"Taking away from 10",  op:"−", gen:()=>pairs(0,10,0,10).filter(([a,b])=>b<=a)},
   {id:"s20", name:"Taking away from teens",op:"−",gen:()=>pairs(2,9,2,9).filter(([x,y])=>x+y>10).map(([x,y])=>[x+y,y])},
@@ -20,13 +22,23 @@ const L = [
 ];
 function range(a,b){const r=[];for(let i=a;i<=b;i++)r.push(i);return r}
 function pairs(a1,a2,b1,b2){return range(a1,a2).flatMap(a=>range(b1,b2).map(b=>[a,b]))}
-L.forEach(l=>l.facts=l.gen().map(([a,b])=>({k:`${a}${l.op}${b}`,a,b,op:l.op,ans:l.op=="+"?a+b:l.op=="−"?a-b:a*b})));
-const ALL = Object.fromEntries(L.flatMap(l=>l.facts).map(f=>[f.k,f]));
+const ALL = {};
+L.forEach((l,i)=>l.facts=l.gen().map(([a,b])=>{const k=`${a}${l.op}${b}`;
+  return ALL[k]||(ALL[k]={k,a,b,op:l.op,ans:l.op=="+"?a+b:l.op=="−"?a-b:a*b,home:i})}));
 
 const ROUND=10, UNLOCK=0.8, WAIT_OK=2000, WAIT_FIX=2500;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const blank=()=>({lv:0,f:{},rounds:0,fast:8});
-const fix=s=>Object.assign(blank(),s||{});
+const OLD_ORDER=["a5","a10","a20","s10","s20","m1","m2","m3"]; // level order before Doubles
+function fix(saved){
+  const s=Object.assign(blank(),saved||{});
+  if(!s.lvId){ // saved before levels were tracked by id
+    s.lvId=OLD_ORDER[s.lv]||"a5";
+    for(const k of Object.keys(s.f)){const m=/^_told(\d)$/.exec(k);if(m){if(OLD_ORDER[m[1]])s.f["_told"+OLD_ORDER[m[1]]]=s.f[k];delete s.f[k]}}
+  }
+  s.lv=Math.max(0,L.findIndex(l=>l.id==s.lvId));
+  return s;
+}
 
 // ---------- state and saving ----------
 let S=blank(), KID=null, saveTimer=null, saveFailed=false;
@@ -43,6 +55,7 @@ async function api(a, body){
 
 function save(now){
   if(MODE=="demo") return;
+  S.lvId=L[S.lv].id;
   if(MODE=="local"){ lsSet("factgarden",JSON.stringify(S)); return }
   clearTimeout(saveTimer);
   saveTimer=setTimeout(flush, now?0:800);
@@ -58,7 +71,7 @@ async function flush(){
 // ---------- learning logic ----------
 const st=k=>S.f[k]||{s:0,miss:0};
 const known=l=>l.facts.filter(f=>st(f.k).s>=3).length/l.facts.length;
-const unlocked=i=>MODE=="demo"||i==0||known(L[i-1])>=UNLOCK||L.slice(i).some(l=>l.facts.some(f=>S.f[f.k]));
+const unlocked=i=>MODE=="demo"||i==0||known(L[i-1])>=UNLOCK||L.slice(i).some(l=>l.facts.some(f=>f.home>=i&&S.f[f.k]));
 const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
 
 function buildRound(lvIdx){
@@ -66,7 +79,7 @@ function buildRound(lvIdx){
   const learning=shuffle(lv.facts.filter(f=>{const s=st(f.k).s;return s>0&&s<3}));
   const fresh=shuffle(lv.facts.filter(f=>st(f.k).s==0));
   const knownF=shuffle(lv.facts.filter(f=>st(f.k).s>=3));
-  const old=shuffle(L.slice(0,lvIdx).flatMap(l=>l.facts).filter(f=>st(f.k).s>=3));
+  const old=shuffle([...new Set(L.slice(0,lvIdx).flatMap(l=>l.facts))].filter(f=>!lv.facts.includes(f)&&st(f.k).s>=3));
   pick.push(...learning.slice(0,5));
   pick.push(...fresh.slice(0,Math.max(2,6-pick.length)));
   pick.push(...old.slice(0,2));
@@ -93,6 +106,7 @@ function home(){
   app.innerHTML=`
     ${header()}
     ${MODE=="demo"?`<p class="banner">This is a demo. Nothing is saved, and all levels are open.</p>`:""}
+    ${MODE=="local"&&!STANDALONE?`<p class="banner">Progress is saved on this device. On an iPad or iPhone, tap Share, then Add to Home Screen, so Safari keeps it.</p>`:""}
     <button class="go" id="start">Play 10 cards</button>
     <p class="note" id="savenote">${saveFailed?"Progress not saved yet. It will try again after the next card.":""}</p>
     <section class="panel">
@@ -109,7 +123,7 @@ function home(){
       <h2>Levels</h2>
       ${MODE=="demo"?"":`<p class="muted small" style="margin:0">The next level opens at ${UNLOCK*100}% grown. Grown-ups can tap a locked level twice to open it early.</p>`}
       <div class="levels">${L.map((l,i)=>{const p=Math.round(known(l)*100);const u=unlocked(i);
-        return `<button class="lv ${i==S.lv?"on":""} ${u?"":"locked"}" data-i="${i}">
+        return `<button class="lv ${l.sub?"sub":""} ${i==S.lv?"on":""} ${u?"":"locked"}" data-i="${i}">
           <b>${esc(l.name)}</b><span class="pct">${u?p+"%":"locked"}</span>
           <span class="bar"><i style="width:${p}%"></i></span></button>`}).join("")}</div>
     </section>
@@ -137,7 +151,7 @@ function home(){
 
 function drawGrid(lv){
   const g=document.getElementById("grid");
-  const cols=Math.min(11,Math.ceil(Math.sqrt(lv.facts.length*1.6)));
+  const cols=Math.min(11,Math.max(5,Math.ceil(Math.sqrt(lv.facts.length*1.6))));
   g.style.gridTemplateColumns=`repeat(${cols},1fr)`;
   g.innerHTML=lv.facts.map((f,i)=>{const s=st(f.k).s;return `<div style="--h:${Math.round(i*330/lv.facts.length)}" class="cell ${s?"s"+Math.min(s,3):""}" title="${f.a} ${f.op} ${f.b}">${f.a}${f.op}${f.b}</div>`}).join("");
 }
@@ -209,7 +223,7 @@ function next(){R.i++;if(R.i>=R.cards.length)done();else show()}
 function done(){
   S.rounds++;
   let msg="";
-  if(known(L[S.lv])>=UNLOCK&&S.lv<L.length-1&&!S.f["_told"+S.lv]){S.f["_told"+S.lv]=1;msg=`New level open: ${L[S.lv+1].name}`}
+  if(known(L[S.lv])>=UNLOCK&&S.lv<L.length-1&&!S.f["_told"+L[S.lv].id]){S.f["_told"+L[S.lv].id]=1;msg=`New level open: ${L[S.lv+1].name}`}
   save(true);
   const right=R.results.filter(Boolean).length, total=R.results.length;
   const seen=[...new Set(R.cards)];
